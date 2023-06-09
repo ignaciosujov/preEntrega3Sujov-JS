@@ -54,6 +54,7 @@ function TNA(){
     }
     
     elegirMonto()
+    elegirDias()
 }
 
 
@@ -73,6 +74,23 @@ const monto6 = new MontosPlazoFijo(6, "otro")
 
 const opcionesPlazoFijo = [monto1, monto2, monto3, monto4, monto5, monto6];
 
+
+class MesesPlazoFijo{
+    constructor(id, cantMeses){
+        this.id = id,
+        this.cantMeses = cantMeses
+    }
+}
+const cantMes1 = new MesesPlazoFijo(1, 30)
+const cantMes2 = new MesesPlazoFijo(2, 60)
+const cantMes3 = new MesesPlazoFijo(3, 90)
+const cantMes4 = new MesesPlazoFijo(4, 120)
+const cantMes5 = new MesesPlazoFijo(5, "otro")
+
+const opcionesMeses = [cantMes1, cantMes2, cantMes3, cantMes4, cantMes5];
+
+let montoSeleccionado = ""
+
 function elegirMonto(){
     let montosSeleccion = document.getElementById("montosSeleccion")
     let divMontoTitle = document.createElement("div")
@@ -91,7 +109,7 @@ function elegirMonto(){
     });
 
 }
-cliente()
+
 
 function mostrarOtroMonto(){
     let montoElegido = document.querySelector('input[name="monto"]:checked').value
@@ -103,14 +121,52 @@ function mostrarOtroMonto(){
     }else{
         otroMontoDiv.style.display = "none"
     }
+
+    montoSeleccionado = montoElegido
 }
 
 function elegirDias(){
-    let diasSeleccion = document.getElementById
+    let diasSeleccion = document.getElementById("cantDias")
+    let divDiasSelect = document.createElement("div")
+    divDiasSelect.innerHTML = `<select name="dias" id="diasSelect" onchange="mostrarOtrosDias()"></select>`
+    diasSeleccion.append(divDiasSelect)
+    
+    let diasSelect = document.getElementById("diasSelect")
+
+    opcionesMeses.forEach(e => {
+        let divDiasOption = document.createElement("option")
+        
+        divDiasOption.innerHTML = `
+            <option value="${e.id}" id="optionDias">${e.cantMeses}</option>`
+        diasSelect.append(divDiasOption)
+    })
+
+}
+
+
+function mostrarOtrosDias(){
+    let diasElegidos = document.querySelector('select[name="dias"]').value
+    let otrosDias = document.getElementById("otrosDias")
+
+    if (diasElegidos === "otro"){
+        otrosDias.style.display = "block"
+    }else{
+        otrosDias.style.display = "none"
+
+    }
 }
 
 
 
+cliente()
+
+console.log(montoElegido)
+
+function cotizarPlazoFijo(){
+    let montoACotizar = montoElegido
+}
+
+cotizarPlazoFijo()
 
 
 
