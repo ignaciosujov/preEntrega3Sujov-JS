@@ -76,9 +76,9 @@ const opcionesPlazoFijo = [monto1, monto2, monto3, monto4, monto5, monto6];
 
 
 class MesesPlazoFijo{
-    constructor(id, cantMeses){
+    constructor(id, cantDias){
         this.id = id,
-        this.cantMeses = cantMeses
+        this.cantDias = cantDias
     }
 }
 const cantMes1 = new MesesPlazoFijo(1, 30)
@@ -102,7 +102,7 @@ function elegirMonto(){
 
         divMonto.innerHTML = `
         <div class="inputs">
-            <input type="radio" name="monto" value="${e.id}" class="montoElegido" onclick="mostrarOtroMonto()">
+            <input type="radio" name="monto" value="${e.id}" class="montoElegido" onchange="mostrarOtroMonto()">
             <label for="${e.id}"> ${e.monto} </label>
         </div>`
         montosSeleccion.append(divMonto)
@@ -111,24 +111,40 @@ function elegirMonto(){
 }
 
 
+
 function mostrarOtroMonto(){
-    let montoElegido = document.querySelector('input[name="monto"]:checked').value
+    let montoElegidoId = document.querySelector('input[name="monto"]:checked').value
     let otroMontoDiv = document.getElementById("otroMonto")
     
-    if (montoElegido === "6"){
+    if (montoElegidoId === "6"){
         otroMontoDiv.style.display = "block";
+        let otroMontoInput = document.getElementById("montoPersonalizado").value
+        montoSeleccionado = parseInt(otroMontoInput)
 
     }else{
         otroMontoDiv.style.display = "none"
+        let montoElegidoMon = opcionesPlazoFijo.find(e => e.id === parseInt(montoElegidoId))
+        montoSeleccionado = montoElegidoMon
+        if (montoElegidoMon) {
+            montoSeleccionado = montoElegidoMon.monto;
+        } else {
+            montoSeleccionado = "";
+        }
     }
 
-    montoSeleccionado = montoElegido
+
+
 }
+
+let diasSeleccionados = "";
 
 function elegirDias(){
     let diasSeleccion = document.getElementById("cantDias")
     let divDiasSelect = document.createElement("div")
-    divDiasSelect.innerHTML = `<select name="dias" id="diasSelect" onchange="mostrarOtrosDias()"></select>`
+    divDiasSelect.innerHTML = `
+    <select name="dias" id="diasSelect" onchange="mostrarOtrosDias()">
+        <option> Eliga la cantidad de dias </option>
+    </select>`
     diasSeleccion.append(divDiasSelect)
     
     let diasSelect = document.getElementById("diasSelect")
@@ -137,22 +153,33 @@ function elegirDias(){
         let divDiasOption = document.createElement("option")
         
         divDiasOption.innerHTML = `
-            <option value="${e.id}" id="optionDias">${e.cantMeses}</option>`
+            <option value="${e.id}" id="optionDias">${e.cantDias}</option>`
         diasSelect.append(divDiasOption)
     })
 
 }
 
+const diasPersonalizados = document.getElementById("diasPersonalizados")
+diasPersonalizados.onchange = "mostrarOtrosDias()"
+
 
 function mostrarOtrosDias(){
-    let diasElegidos = document.querySelector('select[name="dias"]').value
+    let diasElegidosId = document.querySelector('select[name="dias"]').value
     let otrosDias = document.getElementById("otrosDias")
 
-    if (diasElegidos === "otro"){
+    if (diasElegidosId === "otro"){
         otrosDias.style.display = "block"
+        let otrosDiasInput = document.getElementById("diasPersonalizados").value
+        diasSeleccionados = parseInt(otrosDiasInput);
     }else{
         otrosDias.style.display = "none"
-
+        let diasElegidosCant = opcionesMeses.find(e => e.cantDias === parseInt(diasElegidosId))
+        diasSeleccionados = diasElegidosCant;
+        if (diasElegidosCant){
+            diasSeleccionados = diasElegidosCant.cantDias;
+        }else{
+            diasSeleccionados = "";
+        }
     }
 }
 
@@ -160,13 +187,38 @@ function mostrarOtrosDias(){
 
 cliente()
 
-console.log(montoElegido)
 
 function cotizarPlazoFijo(){
-    let montoACotizar = montoElegido
+    let interesMensual = montoSeleccionado * tnaHoy.tasa / 100 / 12;
+    let montoAlFinalizarPF = parseInt(interesMensual * diasSeleccionados / 30 + montoSeleccionado)
+
+    let PFCotizado = document.getElementById("PFCotizado")
+    PFCotizado.innerHTML = `
+    <div>
+        <h4> Al final del plazo fijo, recibis </h4>
+        <h2> $${montoAlFinalizarPF.toFixed(2)} </h2>
+    </div>
+    <div>
+        <div>
+            <div>
+                <span> TNA </span>
+            </div>
+            <div>
+                <span> ${tnaHoy.tasa}% </span>
+            </div>
+        </div>
+        <div>
+            <div>
+                <span> Interes mensual </span>
+            </div>
+            <div>
+                <span> $${interesMensual.toFixed(2)} </span>
+            </div>
+        </div>
+    </div>`
 }
 
-cotizarPlazoFijo()
+
 
 
 

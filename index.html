@@ -20,17 +20,20 @@
             </div>
             <div id="otroMonto" style="display: none;">
                 <label for="montoPersonalizado">Ingrese monto deseado</label>
-                <input type="number" name="" id="montoPersonalizado">
+                <input type="number" name="" id="montoPersonalizado" onchange="mostrarOtroMonto()">
             </div>
             <div id="cantDias">
                 <label for="dias">A cuantos dias?</label>
             </div>
-            <div id="otrosDias">
+            <div id="otrosDias" style="display: none;">
                 <label for="diasPersonalizados">Ingrese dias deseados</label>
                 <input type="number" name="" id="diasPersonalizados">        
             </div>
+            <div id="PFCotizado">
+
+            </div>
             <div class="botones">
-                <button type="submit">Calcular Plazo Fijo</button>
+                <button type="submit" onclick="cotizarPlazoFijo()">Calcular Plazo Fijo</button>
             </div>
         </div>
     </div>
