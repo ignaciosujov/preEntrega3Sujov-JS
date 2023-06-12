@@ -8,6 +8,7 @@ function validarNumero(numero, mensaje){
 
 
 
+
 let nombreUserLS = localStorage.getItem("userName")
 let nombreUser = ""
 
@@ -19,7 +20,7 @@ function cliente(){
         nombre = document.getElementById("tna")
         nombre.innerHTML = `
         <h2>Coder<span>Bank</span></h2>
-        <p> ingrese su nombre para continuar: <input type="text" id="nombreUser"> <input type="submit" value="Aceptar" onClick="TNA()"> </p>
+        <p> Ingrese su nombre para continuar: <input type="text" id="nombreUser"> <input type="submit" value="Aceptar" onClick="TNA()"> </p>
         `
     }
 }
@@ -38,8 +39,8 @@ function TNA(){
         let mostrarTNA = document.getElementById("tna")
         mostrarTNA.innerHTML = `
         <h2>Coder<span>Bank</span></h2>
-        <p> Bienvenido ${nombreUser}! Simulá tu Plazo Fijo en CoderBank </p>
-        <p> Le informamos que la TNA es de ${tnaHoy.tasa}%. Actualizado al ${tnaHoy.fecha.toLocaleDateString()}  </p>`
+        <p> Bienvenido ${nombreUser}! Simulá tu Plazo Fijo en <strong>Coder</strong>Bank </p>
+        <p> Le informamos que la TNA<img id="imgTNA" onclick="" src="https://www.bbva.com.ar/simulador-plazo-fijo/img/help.e55ddb01.svg"> es de <span> ${tnaHoy.tasa}%</span>. Actualizado al ${tnaHoy.fecha.toLocaleDateString()}  </p>`
 
     }else{
         let nombreUser = document.getElementById("nombreUser").value
@@ -48,13 +49,25 @@ function TNA(){
         let mostrarTNA = document.getElementById("tna")
         mostrarTNA.innerHTML = `
         <h2>Coder<span>Bank</span></h2>
-        <p> Bienvenido ${nombreUser}! Simulá tu Plazo Fijo en CoderBank </p>
-        <p> Le informamos que la TNA es de ${tnaHoy.tasa}%. Actualizado al ${tnaHoy.fecha.toLocaleDateString()}  </p>`
+        <p> Bienvenido ${nombreUser}! Simulá tu Plazo Fijo en <strong>Coder</strong>Bank </p>
+        <p> Le informamos que la TNA<img id="imgTNA" onclick="" src="https://www.bbva.com.ar/simulador-plazo-fijo/img/help.e55ddb01.svg"> es de <span> ${tnaHoy.tasa}%</span>. Actualizado al ${tnaHoy.fecha.toLocaleDateString()}  </p>`
         
     }
     
+    const imgTNA = document.getElementById("imgTNA")
+    imgTNA.onclick = () => {
+        swal.fire(
+            '¿Que es la tasa nominal actual? (TNA)',
+            'Indica el porcentaje que se cobrará en un plazo de un año sin períodos de capitalización intermedio.',
+            'question'
+        )
+    }
+
     elegirMonto()
     elegirDias()
+    const botonCalcular = document.getElementById("botonCalcular")
+    botonCalcular.innerHTML = '<button type="submit" onclick="cotizarPlazoFijo()">Calcular Plazo Fijo</button>'
+
 }
 
 
@@ -94,7 +107,7 @@ let montoSeleccionado = ""
 function elegirMonto(){
     let montosSeleccion = document.getElementById("montosSeleccion")
     let divMontoTitle = document.createElement("div")
-    divMontoTitle.innerHTML = "<h3> Eliga un monto a cotizar"
+    divMontoTitle.innerHTML = "<h3> Elija un monto a cotizar </h3>"
     montosSeleccion.append(divMontoTitle)
 
     opcionesPlazoFijo.forEach(e => {
@@ -142,6 +155,7 @@ function elegirDias(){
     let diasSeleccion = document.getElementById("cantDias")
     let divDiasSelect = document.createElement("div")
     divDiasSelect.innerHTML = `
+    <label for="dias"><h3>A cuantos dias?</h3></label>
     <select name="dias" id="diasSelect" onchange="mostrarOtrosDias()">
         <option> Eliga la cantidad de dias </option>
     </select>`
@@ -158,9 +172,6 @@ function elegirDias(){
     })
 
 }
-
-const diasPersonalizados = document.getElementById("diasPersonalizados")
-diasPersonalizados.onchange = "mostrarOtrosDias()"
 
 
 function mostrarOtrosDias(){
@@ -194,25 +205,27 @@ function cotizarPlazoFijo(){
 
     let PFCotizado = document.getElementById("PFCotizado")
     PFCotizado.innerHTML = `
-    <div>
-        <h4> Al final del plazo fijo, recibis </h4>
-        <h2> $${montoAlFinalizarPF.toFixed(2)} </h2>
-    </div>
-    <div>
+    <div class="PFFinal">
         <div>
-            <div>
-                <span> TNA </span>
-            </div>
-            <div>
-                <span> ${tnaHoy.tasa}% </span>
-            </div>
+            <h4> Al final del plazo fijo, recibis </h4>
+            <h2> $${montoAlFinalizarPF.toFixed(2)} </h2>
         </div>
-        <div>
-            <div>
-                <span> Interes mensual </span>
+        <div class="row infoPFFinal">
+            <div class="col-2">
+                <div>
+                    <span> TNA </span>
+                </div>
+                <div class="infoAdicional">
+                    <span> ${tnaHoy.tasa}% </span>
+                </div>
             </div>
-            <div>
-                <span> $${interesMensual.toFixed(2)} </span>
+            <div class="col-10">
+                <div>
+                    <span> Interes mensual </span>
+                </div>
+                <div class="infoAdicional">
+                    <span> $${interesMensual.toFixed(2)} </span>
+                </div>
             </div>
         </div>
     </div>`
